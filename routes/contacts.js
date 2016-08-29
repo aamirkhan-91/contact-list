@@ -26,4 +26,14 @@ router.post('/', function(req, res)
   });
 });
 
+router.delete('/:id', function(req, res)
+{
+  console.log('DELETE /contacts/' + req.params.id);
+
+  db.contactlist.remove({_id: mongo.ObjectId(req.params.id)}, function(err, doc)
+  {
+    res.json(doc);
+  });
+});
+
 module.exports = router;

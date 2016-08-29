@@ -37,5 +37,20 @@ contactsApp.controller('appCtrl', ['$scope', '$http', function($scope, $http)
     });
   }
 
+  $scope.remove = function(id)
+  {
+    //console.log(id);
+    $http.delete('/contacts/' + id)
+    .then(function successCallback(response)
+    {
+      console.log("Successfully executed DELETE /contacts/" + id);
+      get();
+    },
+    function errorCallback(response)
+    {
+      console.log("Failed to execute DELETE /contacts" + id + ": "+ response.status + "-" + response.statusText);
+    });
+  }
+
   get();
 }]);
