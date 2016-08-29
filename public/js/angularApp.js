@@ -19,5 +19,23 @@ contactsApp.controller('appCtrl', ['$scope', '$http', function($scope, $http)
     });
   }
 
+  $scope.addContact = function()
+  {
+    console.log($scope.contact);
+
+    $http.post('/contacts', $scope.contact)
+    .then(function successCallback(response)
+    {
+      console.log('Success!');
+      console.log(response.data);
+
+      get();
+    },
+    function errorCallback(response)
+    {
+      console.log('Failure!');
+    });
+  }
+
   get();
 }]);

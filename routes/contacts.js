@@ -15,4 +15,15 @@ router.get('/', function(req, res)
   });
 });
 
+router.post('/', function(req, res)
+{
+  console.log('Received POST /contacts');
+  console.log(req.body);
+
+  db.contactlist.insert(req.body, function(err, doc)
+  {
+    res.json(doc);
+  });
+});
+
 module.exports = router;
