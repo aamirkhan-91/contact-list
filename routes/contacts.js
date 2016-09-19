@@ -57,7 +57,7 @@ module.exports = function(express)
     {
         console.log('DELETE /contacts/' + req.params.id);
 
-        models.contact.remove(
+        models.contact.findOneAndRemove(
         {
             "id": req.body.id
         }, function(err, contact)
