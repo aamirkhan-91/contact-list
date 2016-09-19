@@ -1,39 +1,79 @@
-var express = require('express');
-var router = express.Router();
-
-var mongo = require('mongojs');
-var db = mongo('contactlist', ['contactlist']);
-
-router.get('/', function(req, res)
+module.exports = function(express)
 {
-  console.log("Received GET /contacts");
+    var router = express.Router();
+    var mongoose = require('mongoose');
+    var models = require('../models/models')(mongoose);
 
-  db.contactlist.find(function(err, docs)
-  {
-    console.log(docs);
-    res.json(docs);
-  });
-});
+    router.get('/', function(req, res)
+    {
+        console.log("Received GET /contacts");
 
-router.post('/', function(req, res)
-{
-  console.log('Received POST /contacts');
-  console.log(req.body);
+        models.contact.find(function(err, docs)
+        {
+            if (err)
+            {
+                console.log('An error occurred.');
+            }
 
-  db.contactlist.insert(req.body, function(err, doc)
-  {
-    res.json(doc);
-  });
-});
+            else if (docs)
+            {
+                res.json(docs);
+            }
 
-router.delete('/:id', function(req, res)
-{
-  console.log('DELETE /contacts/' + req.params.id);
+            else
+            {
+                res.json();
+            }
+        });
+    });
 
-  db.contactlist.remove({_id: mongo.ObjectId(req.params.id)}, function(err, doc)
-  {
-    res.json(doc);
-  });
-});
+    router.post('/', function(req, res)
+    {
+        console.log('Received POST /contacts');
+        console.log(req.body);
 
-module.exports = router;
+        var contact = new models.contact(
+        {
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone
+        });
+
+        contact.save(function(err)
+        {
+            if (err)
+            {
+                console.log('An error occurred.');
+            }
+
+            else
+            {
+                res.json(contact);
+            }
+        });
+    });
+
+    router.delete('/:id', function(req, res)
+    {
+        console.log('DELETE /contacts/' + req.params.id);
+
+        models.contact.remove(
+        {
+            "id": req.body.id
+        }, function(err, contact)
+        {
+            if (err)
+            {
+                console.log('An error occurred.');
+            }
+
+            else
+            {
+                console.log("Deleted");
+                res.json(contact);
+            }
+        });
+    });
+
+    return router;
+}
