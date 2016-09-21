@@ -59,7 +59,7 @@ module.exports = function(express)
 
         models.contact.findOneAndRemove(
         {
-            "id": req.body.id
+            "_id": req.params.id
         }, function(err, contact)
         {
             if (err)
@@ -67,10 +67,16 @@ module.exports = function(express)
                 console.log('An error occurred.');
             }
 
+            if (contact)
+            {
+                console.log(contact);
+                res.json(contact);
+            }
+
             else
             {
-                console.log("Deleted");
-                res.json(contact);
+                console.log("No contact exists by that id");
+                //res.json("")
             }
         });
     });
