@@ -5,6 +5,7 @@
         <script src="js/angularApp.js"></script>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="/stylesheets/styles.css"/>
     </head>
     <body ng-app="contactsApp">
         <div class="container" ng-controller="appCtrl">
@@ -15,24 +16,33 @@
                         <th>Name</th>
                         <th>Number</th>
                         <th>Email</th>
-                        <th>Action</th>
+                        <th>Actions</th>
+                        <th>&nbsp;</th>
                     </tr>
                     <tr>
-                        <td><input class="form-control" ng-model="contact.name"/></td>
+                        <td><input class="form-control" ng-model="contact.name" ng-required></td>
                         <td><input class="form-control" ng-model="contact.phone"/></td>
-                        <td><input class="form-control" ng-model="contact.email"/></td>
+                        <td><input class="form-control" ng-model="contact.email" ng-required/></td>
                         <td>
                             <button class="btn btn-primary" ng-click="addContact()">Add Contact</button>
                         </td>
+                        <td></td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="person in persons">
-                        <td>{{person.name}}</td>
-                        <td>{{person.phone}}</td>
-                        <td>{{person.email}}</td>
+                    <tr ng-repeat="contact in contacts">
+                        <td ng-hide="editting">{{contact.name}}</td>
+                        <td ng-show="editting"><input class="form-control" ng-model="contact.name"/></td>
+                        <td ng-hide="editting">{{contact.phone}}</td>
+                        <td ng-show="editting"><input class="form-control" ng-model="contact.phone"/></td>
+                        <td ng-hide="editting">{{contact.email}}</td>
+                        <td ng-show="editting"><input class="form-control" ng-model="contact.email"/></td>
                         <td>
-                            <button ng-click="remove(person._id)" class="btn btn-danger">Remove</button>
+                            <button ng-hide="editting" ng-click="editting=true" class="btn btn-warning">Edit</button>
+                            <button ng-show="editting" ng-click="editting=false; update(contact._id)" class="btn btn-warning">Update</button>
+                        </td>
+                        <td>
+                            <button ng-click="remove(contact._id)" class="btn btn-danger">Remove</button>
                         </td>
                     </tr>
                 </tbody>
